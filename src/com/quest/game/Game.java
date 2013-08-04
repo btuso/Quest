@@ -1,5 +1,13 @@
 package com.quest.game;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Random;
 
 import org.andengine.engine.Engine;
@@ -9,6 +17,9 @@ import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.Context;
 import android.net.wifi.WifiInfo;
@@ -30,6 +41,7 @@ import com.quest.helpers.PlayerHelper;
 import com.quest.helpers.SceneHelper;
 import com.quest.helpers.TextHelper;
 import com.quest.helpers.TimerHelper;
+import com.quest.network.Client;
 import com.quest.network.QClient;
 import com.quest.network.QServer;
 import com.quest.objects.BooleanMessage;
@@ -42,11 +54,15 @@ public class Game extends SimpleBaseGameActivity {
 	// ===========================================================
 	// Fields
 	// ===========================================================
+	public static String SERVER_IP = "192.168.37.100";
+	public static int SERVER_PORT = 4444;
+	
 	private static SceneHelper mSceneManager;
 	private static MapHelper mMapManager;
 	private static Game mInstance;
 	private static QServer mServer;
-	private static QClient mClient;
+	private static QClient mQClient;
+	private static Client mClient;
 	private static String mUserID;
 	private static DataHandler mDataHandler;
 	private static TextHelper mTextHelper;
@@ -148,7 +164,6 @@ public class Game extends SimpleBaseGameActivity {
 		WifiManager wifiMan = (WifiManager)Game.getInstance().getSystemService(Context.WIFI_SERVICE);
 		WifiInfo wifiInf = wifiMan.getConnectionInfo();
 		Game.mUserID = wifiInf.getMacAddress();
-		Log.d("Quest!",""+mUserID);
 		// Init Objects
 		Game.mSceneManager = new SceneHelper();
 		Game.mDataHandler = new DataHandler();
@@ -238,12 +253,20 @@ public class Game extends SimpleBaseGameActivity {
 		isServer = true;
 	}
 
-	public static QClient getClient() {
+	public static Client getClient() {
 		return mClient;
 	}
 	
-	public static void setClient(QClient mClient) {
+	public static void setClient(Client mClient) {
 		Game.mClient = mClient;
+	}
+	
+	public static QClient getQClient() {
+		return mQClient;
+	}
+	
+	public static void setQClient(QClient mClient) {
+		Game.mQClient = mClient;
 		isServer = false;
 	}
 
@@ -361,7 +384,9 @@ public class Game extends SimpleBaseGameActivity {
 	}
 
 	public static boolean isServer(){
-		return isServer;
+		return false;
+		//#TODO
+		//		return isServer;
 	}
 
 

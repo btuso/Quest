@@ -462,7 +462,7 @@ public class StaticDatabase extends SQLiteOpenHelper implements GameFlags{
           		 db.insert(tItem, null, cv);          		 
           		 cv.clear();          		 
                  cv.put(fItemModifierID, FLAG_ITEM_IRON_HELM);
-          		 cv.put(fItemModifierEndurance, 5);
+          		 cv.put(fItemModifierEndurance, 3);
           		 cv.put(fItemModifierIntelligence, 0);
           		 cv.put(fItemModifierPower, 0);
           		 cv.put(fItemModifierDefense, 5);

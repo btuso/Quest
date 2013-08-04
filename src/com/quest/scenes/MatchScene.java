@@ -975,7 +975,7 @@ public class MatchScene extends Scene implements GameFlags {
 						if(mGrabbed) {
 							mGrabbed = false;
 							//mandar mensaje de desconexion
-							Game.getClient().terminate();
+							Game.getQClient().terminate();
 							MatchScene.this.clearTouchAreas();
 							ShowLowerBar(true);
 							MatchScene.this.SwitchEntity(LoadMatchesEntity());
@@ -1054,7 +1054,7 @@ public class MatchScene extends Scene implements GameFlags {
 		                  //Eligiendo un chara en partida ajena
 		                  if(MatchScene.this.mSelectedCharacterID!=0){
 			            	  //Mandar mensaje de con el char elegido chara
-		                	  Game.getClient().sendSelectedPlayer(mSelectedCharacterID);
+		                	  Game.getQClient().sendSelectedPlayer(mSelectedCharacterID);
 			            		 MatchScene.this.SwitchEntity(LoadLobbyEntity(true,null,null));
 			            		 
 			              }
@@ -1686,7 +1686,7 @@ public class MatchScene extends Scene implements GameFlags {
 												}else{
 													//Creando chara en partida ajena
 													MatchScene.this.clearTouchAreas();
-													Game.getClient().sendPlayerCreate(mChoices,Game.getUserID());//*** sacar profile data y match data
+													Game.getQClient().sendPlayerCreate(mChoices,Game.getUserID());//*** sacar profile data y match data
 													if(!Game.getDataHandler().checkifJoined(Game.getProfileData().getUserID(), Game.getMatchData().getMatchName())){
 													Game.getDataHandler().AddNewMatch(Game.getDataHandler().getProfileID(Game.getProfileData().getUserID()), Game.getMatchData().getMatchName(), Game.getMatchData().getPassword(),true);
 													}
@@ -2049,9 +2049,9 @@ public class MatchScene extends Scene implements GameFlags {
 		initClient(pIP);
 		Game.setProfileData(new ProfileData(pUserID,Game.getDataHandler().getUsername(pUserID)));
 		Game.setMatchData(new MatchData(pMatchName,pPassword));//****Cambiar a client
-			Game.getClient().sendConnectionRequestMessage(Game.getUserID(),Game.getDataHandler().getUsername(Game.getUserID()),pPassword,pMatchName);
+			Game.getQClient().sendConnectionRequestMessage(Game.getUserID(),Game.getDataHandler().getUsername(Game.getUserID()),pPassword,pMatchName);
 
-		Game.getClient().sendPingMessage();
+		Game.getQClient().sendPingMessage();
 
 	} 
 	
@@ -2070,8 +2070,8 @@ public class MatchScene extends Scene implements GameFlags {
 	
 	private void initClient(String pIP) {
 		try {
-			Game.setClient(new QClient(pIP, new ExampleServerConnectorListener()));
-			Game.getClient().getConnection().start();
+			Game.setQClient(new QClient(pIP, new ExampleServerConnectorListener()));
+			Game.getQClient().getConnection().start();
 		} catch (final Throwable t) {
 			Debug.e(t);
 		}

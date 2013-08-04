@@ -7,6 +7,12 @@ public interface ClientMessageFlags {
 	// ===========================================================
 
 	/* Client --> Server */
+	public static final short NEW_FLAG_MESSAGE_SERVER_CONNECTION_REQUEST = 100;
+	
+	
+	
+	
+	
 	//Match - connection flags
 	public static final short FLAG_MESSAGE_CLIENT_CONNECTION_PING = 200;
 	public static final short FLAG_MESSAGE_CLIENT_CONNECTION_REQUEST = 201;

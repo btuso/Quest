@@ -24,7 +24,7 @@ public class BattleHelper implements GameFlags{
 		if(tmpAttack.getEffect()[1]!=3)pAttackingEntity.decreaseMP(tmpAttack.getManaCost());
 		Game.getAttacksHelper().recycleAttack(tmpAttack);
 		if(!Game.isServer()){
-			Game.getClient().sendAttackMessage((Integer)(pAttackedEntity.getUserData()), ATTACK_FLAG);
+			Game.getQClient().sendAttackMessage((Integer)(pAttackedEntity.getUserData()), ATTACK_FLAG);
 		}else{
 			Game.getServer().sendMessageAttackStarted(pAttackingEntity, ATTACK_FLAG);
 			manageAttack(pAttackingEntity, ATTACK_FLAG, pAttackedEntity);

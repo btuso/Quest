@@ -193,7 +193,7 @@ public class MapHelper implements IMeasureConstants {
 					}
 					
 					if(Game.getPlayerHelper().isAloneInMap(Game.getPlayerHelper().getOwnPlayer())){
-						Game.getClient().sendCollideTiles(Integer.parseInt(pName), MapClientCollideTiles.get(Integer.parseInt(pName)));
+						Game.getQClient().sendCollideTiles(Integer.parseInt(pName), MapClientCollideTiles.get(Integer.parseInt(pName)));
 					}
 				}
 			}
@@ -219,7 +219,7 @@ public class MapHelper implements IMeasureConstants {
 							}
 						}else{//Pido que se generen los mobs
 							if(!firstime)
-							Game.getClient().sendMobRequest(Integer.parseInt(object.getTMXObjectProperties().get(1).getValue()), Integer.parseInt(pName), corner1X, corner1Y, corner2X, corner2Y, Integer.parseInt(object.getTMXObjectProperties().get(0).getValue()));
+							Game.getQClient().sendMobRequest(Integer.parseInt(object.getTMXObjectProperties().get(1).getValue()), Integer.parseInt(pName), corner1X, corner1Y, corner2X, corner2Y, Integer.parseInt(object.getTMXObjectProperties().get(0).getValue()));
 							firstime = false;
 						}	
 					}else{
@@ -338,7 +338,7 @@ public class MapHelper implements IMeasureConstants {
 														}
 														
 													}else{//If client recycle mobs from past map
-														Game.getClient().sendPlayerChangedMap(Game.getUserID(), nextMapNumber,pX,pY);
+														Game.getQClient().sendPlayerChangedMap(Game.getUserID(), nextMapNumber,pX,pY);
 														Game.getMobHelper().deleteMobs(Game.getMobHelper().getMobsInMap(Integer.parseInt(pName)));
 													}
 													

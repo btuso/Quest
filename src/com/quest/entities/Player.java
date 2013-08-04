@@ -4,7 +4,6 @@ import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
 import org.andengine.engine.camera.hud.controls.BaseOnScreenControl.IOnScreenControlListener;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
-import org.andengine.entity.Entity;
 import org.andengine.entity.scene.ITouchArea;
 import org.andengine.extension.tmx.TMXTile;
 import org.andengine.input.touch.TouchEvent;
@@ -12,7 +11,6 @@ import org.andengine.input.touch.TouchEvent;
 import android.util.Log;
 
 import com.quest.constants.GameFlags;
-import com.quest.entities.objects.Item;
 import com.quest.game.Game;
 import com.quest.helpers.InventoryItemHelper;
 import com.quest.timers.Timer;
@@ -142,7 +140,7 @@ public class Player extends BaseEntity implements IOnScreenControlListener, ITou
 				
 				// Sends the move
 				if(!Game.isServer()){
-					Game.getClient().sendMovePlayerMessage(this.mUserID, tmpNewTile.getTileColumn(), tmpNewTile.getTileRow());
+					Game.getQClient().sendMovePlayerMessage(this.mUserID, tmpNewTile.getTileColumn(), tmpNewTile.getTileRow());
 				}else{
 					Game.getServer().sendUpdateEntityPositionMessage(this.mUserID, tmpNewTile.getTileColumn(), tmpNewTile.getTileRow());
 					this.moveToTile(tmpNewTile);

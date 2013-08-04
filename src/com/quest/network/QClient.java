@@ -2,6 +2,7 @@ package com.quest.network;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import org.andengine.extension.multiplayer.protocol.adt.message.IMessage;
@@ -17,6 +18,7 @@ import android.util.Log;
 import com.quest.constants.ClientMessageFlags;
 import com.quest.constants.GameFlags;
 import com.quest.constants.ServerMessageFlags;
+import com.quest.data.ProfileData;
 import com.quest.entities.Mob;
 import com.quest.entities.Player;
 import com.quest.entities.objects.Attack;
@@ -32,6 +34,7 @@ import com.quest.network.messages.client.ClientMessageSelectedPlayer;
 import com.quest.network.messages.client.ClientMessageSendCollideTiles;
 import com.quest.network.messages.client.ClientMessageSetPlayerAttributes;
 import com.quest.network.messages.client.ConnectionPingClientMessage;
+import com.quest.network.messages.client.externalserver.ClientMessageServerConnectionRequest;
 import com.quest.network.messages.server.ConnectionPongServerMessage;
 import com.quest.network.messages.server.ServerMessageAttackStarted;
 import com.quest.network.messages.server.ServerMessageConnectionAcknowledge;
@@ -69,7 +72,7 @@ public class QClient extends ServerConnector<SocketConnection> implements Client
 	// ===========================================================
 		private void initMessagePool() {
 			this.mMessagePool.registerMessage(FLAG_MESSAGE_CLIENT_CONNECTION_PING, ConnectionPingClientMessage.class);
-			this.mMessagePool.registerMessage(FLAG_MESSAGE_CLIENT_CONNECTION_REQUEST, ClientMessageConnectionRequest.class);
+//			this.mMessagePool.registerMessage(FLAG_MESSAGE_CLIENT_CONNECTION_REQUEST, ClientMessageConnectionRequest.class);
 			this.mMessagePool.registerMessage(FLAG_MESSAGE_CLIENT_PLAYER_CREATE, ClientMessagePlayerCreate.class);
 			this.mMessagePool.registerMessage(FLAG_MESSAGE_CLIENT_SELECTED_PLAYER, ClientMessageSelectedPlayer.class);
 			this.mMessagePool.registerMessage(FLAG_MESSAGE_CLIENT_MOVE_PLAYER, ClientMessageMovePlayer.class);
@@ -79,10 +82,13 @@ public class QClient extends ServerConnector<SocketConnection> implements Client
 			this.mMessagePool.registerMessage(FLAG_MESSAGE_CLIENT_REQUEST_MOBS, ClientMessageMobRequest.class);
 			this.mMessagePool.registerMessage(FLAG_MESSAGE_CLIENT_SET_PLAYER_ATTRIBUTES, ClientMessageSetPlayerAttributes.class);
 			this.mMessagePool.registerMessage(FLAG_MESSAGE_CLIENT_SEND_COLLIDE_TILES, ClientMessageSendCollideTiles.class);
+			
+			//NEW
+			this.mMessagePool.registerMessage(NEW_FLAG_MESSAGE_SERVER_CONNECTION_REQUEST, ClientMessageConnectionRequest.class);
 		}
 	
 		public QClient(final String pServerIP, final ISocketConnectionServerConnectorListener pSocketConnectionServerConnectorListener) throws IOException {
-			super(new SocketConnection(new Socket(pServerIP, SERVER_PORT)), pSocketConnectionServerConnectorListener);
+			super(new SocketConnection(makeConnectionThread(pServerIP, SERVER_PORT)), pSocketConnectionServerConnectorListener);
 			
 			
 			this.registerServerMessage(FLAG_MESSAGE_SERVER_CONNECTION_ACKNOWLEDGE, ServerMessageConnectionAcknowledge.class, new IServerMessageHandler<SocketConnection>() {
@@ -361,7 +367,19 @@ public class QClient extends ServerConnector<SocketConnection> implements Client
 			QClient.this.mMessagePool.recycleMessage(connectionPingClientMessage);
 		}
 		
+		public void sendServerConnectionRequestMessage(ProfileData pData) {
+			final ClientMessageServerConnectionRequest clientMessageServerConnectionRequest = (ClientMessageServerConnectionRequest) QClient.this.mMessagePool.obtainMessage(NEW_FLAG_MESSAGE_SERVER_CONNECTION_REQUEST);
+			clientMessageServerConnectionRequest.setUserID(pData.getUserID());
+			clientMessageServerConnectionRequest.setUsername(pData.getUsername());
+			try {
+				sendClientMessage(clientMessageServerConnectionRequest);				
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			QClient.this.mMessagePool.recycleMessage(clientMessageServerConnectionRequest);
+		}
 
+		@Deprecated
 		public void sendConnectionRequestMessage(final String pUserID,final String pUsername,final String pPassword,final String pMatchName){			
 			final ClientMessageConnectionRequest clientMessageConnectionRequest = (ClientMessageConnectionRequest) QClient.this.mMessagePool.obtainMessage(FLAG_MESSAGE_CLIENT_CONNECTION_REQUEST);
 			clientMessageConnectionRequest.setUserID(pUserID);
@@ -501,6 +519,29 @@ public class QClient extends ServerConnector<SocketConnection> implements Client
 				// TODO: handle exception
 			}
 			QClient.this.mMessagePool.recycleMessage(clientMessageSendCollideTiles);	
+		}
+		
+		
+		static Socket connection;
+		private static Socket makeConnectionThread(final String ip, final int port){
+			
+			Thread connectionThread = new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					try {
+						connection = new Socket(ip, port);
+					} catch (UnknownHostException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			});
+			connectionThread.start();
+			return connection;
 		}
 	// ===========================================================
 	// Inner and Anonymous Classes

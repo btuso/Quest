@@ -420,7 +420,7 @@ public class GameMenuScene extends Scene implements GameFlags,IOnSceneTouchListe
 				this.mInventoryTossSprite = new Sprite(Game.getSceneManager().getDisplay().getDisplayWidth() - 128, offset,this.mInventoryBoxTextureRegion,Game.getInstance().getVertexBufferObjectManager()) {};
 				this.mInventoryEntity.attachChild(mInventoryTossSprite);
 				
-				//Descripción
+				//Descripciî‰¢
 				this.mInventoryDescriptionSprite = new Sprite(0, Game.getSceneManager().getDisplay().getDisplayHeight() - 75, this.mInventoryDescriptionTextureRegion,Game.getInstance().getVertexBufferObjectManager()) {};				
 				this.mInventoryEntity.attachChild(mInventoryDescriptionSprite);
 
@@ -680,11 +680,11 @@ public class GameMenuScene extends Scene implements GameFlags,IOnSceneTouchListe
 	
 	
 	//COSAS DE FACU A ORDENAR
-	private float mSkillScrollLastX = 0; // La vieja posición del dedo haciendo scroll.
-	private float mSkillScrollNewX = 0; // La nueva posición del dedo haciendo scroll.
+	private float mSkillScrollLastX = 0; // La vieja posiciî‰¢ del dedo haciendo scroll.
+	private float mSkillScrollNewX = 0; // La nueva posiciî‰¢ del dedo haciendo scroll.
 	private float mSkillScrollDiferencia = 0; // La diferencia entre LastX y NewX.
 	private int mSkillScrollImageWidth = 1024; // El ancho de la imagen que se va a scrol,lear. Obligatorio para que funcione bien.
-	private short mSkillScrollLastAction = 0; // Si movió a la derecha (1), izquierda (2), o ningún lado (0).
+	private short mSkillScrollLastAction = 0; // Si moviï¿½a la derecha (1), izquierda (2), o ningä½– lado (0).
 	
 	
 	//#################SKILLS ENTITY######################	
@@ -725,7 +725,7 @@ public class GameMenuScene extends Scene implements GameFlags,IOnSceneTouchListe
 					float mTreeX = GameMenuScene.this.mSkillTreeEntity.getX();
 					
 					// Game.getSceneManager().getDisplay().getDisplayWidth() * (2.625/100) ===> Cuenta que centra la imagen en la mitad de la
-					// pantalla. En resolución width 800, hay 21 pixeles que separan la imagen de los bordes horizontales.
+					// pantalla. En resoluciî‰¢ width 800, hay 21 pixeles que separan la imagen de los bordes horizontales.
 					
 					if(mSkillScrollDiferencia > 0){
 						// MUEVE EL DEDO HACIA LA IZQUIERDA (SKILL TREE HACIA LA IZQUIERDA)
@@ -966,7 +966,7 @@ public class GameMenuScene extends Scene implements GameFlags,IOnSceneTouchListe
 				offset+= (mAttributesBoxSprite[i].getWidthScaled() + 20);				
 			}
 			
-			//Descripción
+			//Descripciî‰¢
 			this.mAttributesDescriptionSprite = new Sprite(-120, Game.getSceneManager().getDisplay().getDisplayHeight() - 55, this.mInventoryDescriptionTextureRegion,Game.getInstance().getVertexBufferObjectManager()) {};				
 			this.mAttributesEntity.attachChild(mAttributesDescriptionSprite);
 			this.mAttributesEntity.attachChild(this.mAttributesDescriptionText);
@@ -992,7 +992,7 @@ public class GameMenuScene extends Scene implements GameFlags,IOnSceneTouchListe
 								pAttributes = new int[]{0,0,0,0};
 							}else{
 								for(int i = 0;i<4;i++)pAttributes[i]+=Game.getPlayerHelper().getOwnPlayer().getAttributes()[i];
-								Game.getClient().sendSetPlayerAttributesMessage(Game.getPlayerHelper().getOwnPlayer().getPlayerID(), pAttributes, pUnassigned);
+								Game.getQClient().sendSetPlayerAttributesMessage(Game.getPlayerHelper().getOwnPlayer().getPlayerID(), pAttributes, pUnassigned);
 								pAttributes = new int[]{0,0,0,0};
 							}
 							mAttributesUnassignedPointsText.setText("Unassigned points: "+pUnassigned);

@@ -205,7 +205,7 @@ public class GameScene extends Scene implements GameFlags,IOnSceneTouchListener{
 							if(Game.getAttacksHelper().canAttack(tmpPlayer, tmpPlayer.getAttack_Flag())){
 								tmpPlayer.decreaseMP(Game.getAttacksHelper().getAttackManaCost(tmpPlayer.getAttack_Flag()));
 								TMXTile tmpTile = Game.getMapManager().getTMXTileAt(pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
-								Game.getClient().sendAreaAttackMessage(tmpPlayer.getAttack_Flag(),tmpTile.getTileX()+16,tmpTile.getTileY()+16);
+								Game.getQClient().sendAreaAttackMessage(tmpPlayer.getAttack_Flag(),tmpTile.getTileX()+16,tmpTile.getTileY()+16);
 							}
 						}	
 					}
